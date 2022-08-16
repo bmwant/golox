@@ -159,9 +159,7 @@ func (s *Scanner) number() {
 	}
 
 	f, _ := strconv.ParseFloat(s.Source[s.Start:s.Current], 64)
-	// todo: update addToken definition to accept f
-	_ = f
-	s.addToken(NUMBER)
+	s.addToken(NUMBER, f)
 }
 
 func (s *Scanner) string() {
@@ -176,10 +174,11 @@ func (s *Scanner) string() {
 		return
 	}
 	s.advance()
-	// value = s.Source[]
-	s.addToken(STRING)
+	value := s.Source[s.Start+1 : s.Current-1]
+	s.addToken(STRING, value)
 
 }
+
 func (s *Scanner) peek() byte {
 	if s.isAtEnd() {
 		// Thats how you do this in go
@@ -187,6 +186,7 @@ func (s *Scanner) peek() byte {
 	}
 	return s.Source[s.Current]
 }
+
 func (s *Scanner) peekNext() byte {
 	if s.Current+1 >= len(s.Source) {
 		return '\000'
@@ -204,7 +204,12 @@ func (s *Scanner) match(char byte) bool {
 	s.Current++
 	return true
 }
-func (s *Scanner) addToken(tokenType TokenType) {
-	text := "The token text"
-	s.Tokens = append(s.Tokens, NewToken(tokenType, text, "", s.Line))
+
+func (s *Scanner) addToken(tokenType TokenType, extra ...interface{}) {
+	var literal interface{}
+	if len(extra) > 0 {
+		literal = extra[0]
+	}
+	text := s.Source[s.Start:s.Current]
+	s.Tokens = append(s.Tokens, NewToken(tokenType, text, literal, s.Line))
 }
