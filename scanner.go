@@ -143,7 +143,12 @@ func (s *Scanner) identifier() {
 	for unicode.IsLetter(rune(s.peek())) {
 		s.advance()
 	}
-	s.addToken(IDENTIFIER)
+	text := s.Source[s.Start:s.Current]
+	value, ok := keywords[text]
+	if !ok {
+		value = IDENTIFIER
+	}
+	s.addToken(value)
 }
 
 func (s *Scanner) number() {
