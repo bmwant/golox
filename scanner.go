@@ -6,23 +6,23 @@ import (
 	"unicode"
 )
 
-var keywords = map[string]int{
+var keywords = map[string]TokenType{
 	"and":    AND,
-	"class":  AND,
-	"else":   AND,
-	"false":  AND,
-	"for":    AND,
-	"fun":    AND,
-	"if":     AND,
-	"nil":    AND,
-	"or":     AND,
-	"print":  AND,
-	"return": AND,
-	"super":  AND,
-	"this":   AND,
-	"true":   AND,
-	"var":    AND,
-	"while":  AND,
+	"class":  CLASS,
+	"else":   ELSE,
+	"false":  FALSE,
+	"for":    FOR,
+	"fun":    FUN,
+	"if":     IF,
+	"nil":    NIL,
+	"or":     OR,
+	"print":  PRINT,
+	"return": RETURN,
+	"super":  SUPER,
+	"this":   THIS,
+	"true":   TRUE,
+	"var":    VAR,
+	"while":  WHILE,
 }
 
 type Scanner struct {
@@ -134,7 +134,9 @@ func (s *Scanner) ScanToken() {
 }
 
 func (s *Scanner) advance() byte {
-	return ' '
+	ch := s.Source[s.Current]
+	s.Current++
+	return ch
 }
 
 func (s *Scanner) identifier() {
@@ -202,7 +204,7 @@ func (s *Scanner) match(char byte) bool {
 	s.Current++
 	return true
 }
-func (s *Scanner) addToken(tokenType int) {
+func (s *Scanner) addToken(tokenType TokenType) {
 	text := "The token text"
 	s.Tokens = append(s.Tokens, NewToken(tokenType, text, "", s.Line))
 }

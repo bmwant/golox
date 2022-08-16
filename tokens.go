@@ -1,7 +1,10 @@
 package main
 
+//go:generate stringer -type=TokenType
+type TokenType int
+
 const (
-	LEFT_PAREN = iota
+	LEFT_PAREN TokenType = iota
 	RIGHT_PAREN
 	LEFT_BRACE
 	RIGHT_BRACE
@@ -45,13 +48,13 @@ const (
 )
 
 type Token struct {
-	TokenType int
+	TokenType TokenType
 	Lexeme    string
 	Literal   string
 	Line      int
 }
 
-func NewToken(tokenType int, lexeme string, literal string, line int) Token {
+func NewToken(tokenType TokenType, lexeme string, literal string, line int) Token {
 	return Token{
 		tokenType,
 		lexeme,

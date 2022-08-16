@@ -41,6 +41,11 @@ func runFile(s string) {
 
 func run(line string) {
 	fmt.Println(line)
+	scanner := NewScanner(line)
+	scanner.scanTokens()
+	for _, t := range scanner.Tokens {
+		fmt.Println(t)
+	}
 }
 
 func main() {
